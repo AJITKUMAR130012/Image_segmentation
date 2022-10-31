@@ -56,11 +56,9 @@ print('Done!')
 image_x = random.randint(0, len(train_ids))
 imshow(X_train[image_x])
 plt.show()
+Y_train=Y_train.astype(np.uint8)
 imshow(np.squeeze(Y_train[image_x]))
 plt.show()
-
-
-
 
 #Build the model
 inputs = tf.keras.layers.Input((IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS))
@@ -130,9 +128,7 @@ callbacks = [
         tf.keras.callbacks.EarlyStopping(patience=2, monitor='val_loss'),
         tf.keras.callbacks.TensorBoard(log_dir='logs')]
 
-results = model.fit(X_train, Y_train, validation_split=0.1, batch_size=16, epochs=25, callbacks=callbacks)
-
-####################################
+results = model.fit(X_train, Y_train, validation_split=0.1, batch_size=16, epochs=25)
 
 idx = random.randint(0, len(X_train))
 
@@ -141,18 +137,18 @@ preds_train = model.predict(X_train[:int(X_train.shape[0]*0.9)], verbose=1)
 preds_val = model.predict(X_train[int(X_train.shape[0]*0.9):], verbose=1)
 preds_test = model.predict(X_test, verbose=1)
 
- 
 preds_train_t = (preds_train > 0.5).astype(np.uint8)
 preds_val_t = (preds_val > 0.5).astype(np.uint8)
 preds_test_t = (preds_test > 0.5).astype(np.uint8)
-
 
 # Perform a sanity check on some random training samples
 ix = random.randint(0, len(preds_train_t))
 imshow(X_train[ix])
 plt.show()
+
 imshow(np.squeeze(Y_train[ix]))
 plt.show()
+
 imshow(np.squeeze(preds_train_t[ix]))
 plt.show()
 
@@ -160,7 +156,11 @@ plt.show()
 ix = random.randint(0, len(preds_val_t))
 imshow(X_train[int(X_train.shape[0]*0.9):][ix])
 plt.show()
+
+
 imshow(np.squeeze(Y_train[int(Y_train.shape[0]*0.9):][ix]))
 plt.show()
+
 imshow(np.squeeze(preds_val_t[ix]))
 plt.show()
+
